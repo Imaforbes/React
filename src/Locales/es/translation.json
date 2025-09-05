@@ -1,0 +1,13 @@
+{
+    "header": {
+        "about-me": "Sobre mi",
+        "habilities": "Habilidades",
+        "proyects": "Proyectos",
+        "contact": "Contacto"
+    },
+    "about": {
+        "title": "Sobre mi",
+        "text": "Soy Imanol — ingeniero de software con alma de estratega y vocación por aprender siempre algo más. Mi camino une el pensamiento técnico con la sensibilidad humana: ingeniería, marketing y una inquietud constante por la política, las ideas y el impacto social de la tecnología. Diseño y desarrollo soluciones digitales que no solo funcionan, sino que conectan. Sistemas que hablan con precisión a las máquinas y con empatía a las personas. En la industria de la tecnología, nosotros construimos el futuro. Y para mí, ese futuro debe tener propósito, claridad y una huella que valga la pena dejar. Este portafolio es una ventana a lo que imagino, construyo y cuestiono. Porque crear también es una forma de pensar el mundo.",
+        "button": "Conocer más"
+    }
+}

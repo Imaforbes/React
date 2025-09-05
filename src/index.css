@@ -1,0 +1,83 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definición de variables CSS para el tema */
+:root {
+  --color-primary-start: #60a5fa;
+  /* blue-400 */
+  --color-primary-middle: #5eead4;
+  /* teal-300 */
+  --color-primary-end: #c084fc;
+  /* purple-400 */
+  --color-dark-bg: #0f172a;
+  /* slate-900 */
+  --color-dark-text: #e2e8f0;
+  /* slate-200 */
+  --color-accent-blue: #3b82f6;
+  /* blue-500 */
+  --color-accent-purple: #a855f7;
+  /* purple-500 */
+  --color-accent-teal: #20c997;
+  /* teal-500 */
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  /* Un cambio a una fuente moderna y legible */
+  background-color: var(--color-dark-bg);
+  color: var(--color-dark-text);
+}
+
+/* Animación de los "blobs" de fondo, más suaves y lentos */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  /* Más "bouncy" */
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Animación del degradado de texto */
+@keyframes gradient-x {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 10s ease infinite;
+}
+
+/* Otras utilidades de Tailwind si fueran necesarias */

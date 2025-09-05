@@ -1,0 +1,13 @@
+{
+    "header": {
+        "about-me": "About me",
+        "habilities": "Skills",
+        "proyects": "Projects",
+        "contact": "Contact"
+    },
+    "about": {
+        "title": "About me",
+        "text": "I’m Imanol — a software engineer with a strategist’s mind and a learner’s heart. My path bridges technical precision with human depth: engineering, marketing, and a restless curiosity for politics, ideas, and the social impact of technology. I build digital experiences that do more than function — they connect. Systems crafted to speak clearly to machines, and thoughtfully to people. In the technology industry, we build the future. And I believe that future should be intentional, transparent, and worth leaving behind. This portfolio is a glimpse into what I imagine, create, and question. Because building is also a way of understanding the world.",
+        "button": "See more"
+    }
+}
