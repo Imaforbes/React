@@ -20,6 +20,7 @@ const HeroBackground = () => (
 );
 
 const HomePage = () => {
+  const _MOTION = motion; // reference to satisfy linter unused import
   // Variantes de animación para una entrada escalonada y elegante
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -91,7 +92,7 @@ const HomePage = () => {
           >
             <Link
               to="/projects"
-              className="group relative flex items-center justify-center gap-2 px-9 py-3.5 bg-blue-600 hover:bg-blue-700 text-white text-2lg font-semibold rounded-full shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-500/50"
+              className="group relative flex items-center justify-center gap-2 px-9 py-4 bg-blue-600 hover:bg-blue-700 text-white text-2lg font-semibold rounded-full shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-500/50"
             >
               <FiCode className="text-xl" />
               <span>Ver Proyectos</span>

@@ -6,9 +6,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
 const Header = () => {
+  const _MOTION = motion; // reference to satisfy linter unused import
   const { t, i18n } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState('es');
+  // Eliminado estado no usado: currentLanguage
   const location = useLocation();
 
   const handleLanguageChange = (lang) => {
@@ -106,14 +107,14 @@ const Header = () => {
             animate="visible"
             exit="exit"
             variants={menuVariants}
-            className="md:hidden bg-white/95 absolute top-full left-0 w-full p-4 flex flex-col items-center space-y-4 shadow-lg z-40"
+            className="md:hidden bg-white/95 absolute top-full left-0 w-full p-3 flex flex-col items-center space-y-4 shadow-lg z-40"
           >
             <Link to="/" className="block..." onClick={handleNavLinkClick}>{t('Home')}</Link>
             <Link to="/about" className="block..." onClick={handleNavLinkClick}>{t('About')}</Link>
             <Link to="/projects" className="block..." onClick={handleNavLinkClick}>{t('Projects')}</Link>
             <Link to="/contact" className="block..." onClick={handleNavLinkClick}>{t('Contact')}</Link>
             
-            <motion.div variants={itemVariants} className="flex items-center p-1 bg-gray-200 rounded-full mt-4">
+            <motion.div variants={itemVariants} className="flex items-center p-2 bg-gray-200 rounded-full mt-4">
               <button
                 onClick={() => handleLanguageChange('es')}
                 className={`px-4 py-2 ... ${i18n.language.startsWith('es') ? 'bg-white ...' : '...'}`}
@@ -121,7 +122,7 @@ const Header = () => {
                 ES
               </button>
               <button
-                onClick={() => handleLanguagege('en')}
+                onClick={() => handleLanguageChange('en')}
                 className={`px-4 py-2 ... ${i18n.language.startsWith('en') ? 'bg-white ...' : '...'}`}
               >
                 EN

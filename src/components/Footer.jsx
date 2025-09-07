@@ -3,7 +3,6 @@ import React from 'react';
 import { Github, Linkedin, Twitter } from 'lucide-react';
 
 const Footer = () => {
-  // El año no necesita ser un estado. Se calcula una vez y listo.
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
@@ -13,8 +12,10 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="py-12 bg-black text-gray-400 text-center">
-      <div className="container mx-auto px-6 max-w-4xl">
+    // --> MEJORA: Padding responsivo (py-8 en móvil, py-12 en escritorio).
+    <footer className="py-8 md:py-12 bg-black text-gray-400 text-center">
+      {/* --> MEJORA: Padding responsivo (px-4 en móvil, px-6 en escritorio). */}
+      <div className="container mx-auto px-4 md:px-6 max-w-4xl">
         <div className="mb-8">
           <div className="flex justify-center space-x-6">
             {socialLinks.map(social => (
@@ -32,7 +33,6 @@ const Footer = () => {
             ))}
           </div>
         </div>
-
         <p className="text-gray-500 text-sm">
           © {currentYear} Imanol Pérez Arteaga. Todos los derechos reservados.
         </p>

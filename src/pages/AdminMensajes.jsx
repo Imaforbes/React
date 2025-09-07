@@ -1,7 +1,9 @@
 // src/pages/AdminMensajes.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiLogOut, FiTrash2, FiAlertTriangle } from 'react-icons/fi';
+// --> CAMBIO CLAVE: Se importan los iconos desde 'lucide-react' para mantener la consistencia del proyecto.
+import { LogOut, Trash2, AlertTriangle } from 'lucide-react'; 
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 
 const HeroBackground = () => (
@@ -19,20 +21,18 @@ const AdminMensajes = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [messageToDelete, setMessageToDelete] = useState(null);
 
-  // --- LÓGICA AÑADIDA ---
-  // Este useEffect se ejecuta cuando la página carga y busca los mensajes en el backend.
   useEffect(() => {
     const fetchMensajes = async () => {
       try {
         const response = await fetch('/api_db/get_mensajes.php', { credentials: 'include' });
-        if (response.status === 403) { // Si la sesión no es válida
+        if (response.status === 403) {
           navigate('/login');
           return;
         }
         if (!response.ok) throw new Error('La respuesta de la red no fue exitosa');
         const data = await response.json();
         if (data.error) {
-            navigate('/login'); // Redirige si PHP devuelve un error de sesión
+            navigate('/login');
         } else {
             setMensajes(data);
         }
@@ -45,19 +45,16 @@ const AdminMensajes = () => {
     fetchMensajes();
   }, [navigate]);
 
-  // Lógica para cerrar sesión
   const handleLogout = async () => {
     await fetch('/api_db/logout.php', { credentials: 'include' });
     navigate('/login');
   };
 
-  // Lógica para preparar la eliminación
   const handleDeleteClick = (id) => {
     setMessageToDelete(id);
     setShowConfirmModal(true);
   };
   
-  // Lógica para confirmar y ejecutar la eliminación
   const confirmDelete = async () => {
     if (!messageToDelete) return;
     try {
@@ -73,7 +70,7 @@ const AdminMensajes = () => {
       } else {
         alert(`Error al eliminar: ${result.message || 'Error desconocido'}`);
       }
-    } catch (err) {
+    } catch {
       alert('Error de conexión.');
     } finally {
       setShowConfirmModal(false);
@@ -81,12 +78,10 @@ const AdminMensajes = () => {
     }
   };
 
-  // Lógica para cancelar la eliminación
   const cancelDelete = () => {
     setShowConfirmModal(false);
     setMessageToDelete(null);
   };
-  // --- FIN DE LA LÓGICA AÑADIDA ---
 
   if (loading) return <div className="min-h-screen bg-gray-800 flex items-center justify-center text-white">Cargando mensajes...</div>;
   if (error) return <div className="min-h-screen bg-gray-800 flex items-center justify-center text-red-400">Error: {error}</div>;
@@ -96,18 +91,27 @@ const AdminMensajes = () => {
       <div className="relative min-h-screen bg-gradient-to-br from-gray-800 to-gray-700 text-white p-4 sm:p-8">
         <HeroBackground />
         <div className="relative z-10 container mx-auto max-w-7xl">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-4xl font-extrabold tracking-tighter">Bandeja de Entrada</h1>
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+
+          <motion.h1
+            className="text-3xl sm:text-3xl md:text-3xl font-extrabold text-center mb-6 leading-tight tracking-tighter"
+          >
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-teal-300 to-purple-400 animate-gradient-x">
+            Bandeja de Entrada
+            </span>
+          </motion.h1>
+            
             <button
               onClick={handleLogout}
-              className="group flex items-center justify-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-md font-semibold rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95"
+              className="group flex items-center justify-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95"
             >
-              <FiLogOut />
+              {/* --> CAMBIO CLAVE: Se usa el icono de Lucide. */}
+              <LogOut size={16} />
               <span>Cerrar Sesión</span>
             </button>
           </div>
           <div className="overflow-x-auto bg-gray-900/50 rounded-2xl shadow-2xl border border-gray-700/50 backdrop-blur-sm">
-            <table className="min-w-full">
+            <table className="min-w-full text-sm">
               <thead className="border-b border-gray-700/50">
                 <tr>
                   <th className="p-4 text-left font-semibold text-gray-400">ID</th>
@@ -126,8 +130,13 @@ const AdminMensajes = () => {
                       <td className="p-4 whitespace-nowrap text-gray-400">{mensaje.fecha}</td>
                       <td className="p-4 whitespace-nowrap">{mensaje.nombre}</td>
                       <td className="p-4 whitespace-nowrap"><a href={`mailto:${mensaje.email}`} className="text-blue-400 hover:underline">{mensaje.email}</a></td>
-                      <td className="p-4 max-w-md text-gray-300 whitespace-pre-wrap break-words">{mensaje.mensaje}</td>
-                      <td className="p-4"><button onClick={() => handleDeleteClick(mensaje.id)} className="text-red-400 hover:text-red-500 transition-colors"><FiTrash2 size={20} /></button></td>
+                      <td className="p-4 max-w-xs text-gray-300 whitespace-pre-wrap break-words">{mensaje.mensaje}</td>
+                      <td className="p-4">
+                        <button onClick={() => handleDeleteClick(mensaje.id)} className="text-red-400 hover:text-red-500 transition-colors">
+                          {/* --> CAMBIO CLAVE: Se usa el icono de Lucide. */}
+                          <Trash2 size={20} />
+                        </button>
+                      </td>
                     </tr>
                   ))
                 ) : (
@@ -146,7 +155,8 @@ const AdminMensajes = () => {
               initial={{ scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.7, opacity: 0 }}
               className="bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center border border-gray-700"
             >
-              <FiAlertTriangle className="text-yellow-400 text-5xl mx-auto mb-4" />
+              {/* --> CAMBIO CLAVE: Se usa el icono de Lucide. */}
+              <AlertTriangle className="text-yellow-400 text-5xl mx-auto mb-4" />
               <h2 className="text-2xl font-bold mb-2">Confirmar Eliminación</h2>
               <p className="text-gray-400 mb-8">¿Estás seguro? Esta acción no se puede deshacer.</p>
               <div className="flex justify-center gap-4">

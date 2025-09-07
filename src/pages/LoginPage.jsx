@@ -1,6 +1,7 @@
 // src/pages/LoginPage.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 
 const HeroBackground = () => (
@@ -35,7 +36,7 @@ const LoginPage = () => {
       } else {
         setError(result.message || 'Error al iniciar sesión.');
       }
-    } catch (err) {
+    } catch {
       setError('Error de conexión. Inténtalo de nuevo.');
     }
   };
@@ -50,9 +51,15 @@ const LoginPage = () => {
         transition={{ type: "spring", damping: 15, stiffness: 100 }}
         className="relative z-10 bg-gray-900/50 p-8 rounded-2xl shadow-2xl w-full max-w-sm border border-gray-700/50 backdrop-blur-sm"
       >
-        <h2 className="text-3xl font-extrabold text-center mb-6 tracking-tighter">
-          Admin Login
-        </h2>
+
+<motion.h1
+            className="text-3xl sm:text-3xl md:text-3xl font-extrabold text-center mb-6 leading-tight tracking-tighter"
+          >
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-teal-300 to-purple-400 animate-gradient-x">
+            Admin Login
+            </span>
+          </motion.h1>
+
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-400 mb-2">Usuario</label>
