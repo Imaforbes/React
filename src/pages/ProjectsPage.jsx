@@ -3,97 +3,95 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FiGithub, FiExternalLink } from 'react-icons/fi';
 
-// --- Componente ProjectCard ---
+// --> MODIFICACIÓN: Se importa y usa el componente de fondo animado para la consistencia visual.
+const HeroBackground = () => (
+  <div className="absolute inset-0 -z-10 overflow-hidden opacity-70">
+    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl animate-blob" />
+    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl animate-blob animation-delay-2000" />
+    <div className="absolute top-1/3 right-1/3 w-80 h-80 bg-teal-500/15 rounded-full blur-3xl animate-blob animation-delay-4000" />
+  </div>
+);
+
 const ProjectCard = ({ project }) => {
+  // --> MODIFICACIÓN: Animación de entrada para cada tarjeta, usando el efecto "spring" de HomePage.
   const cardVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+    hidden: { opacity: 0, y: 40, scale: 0.95 },
+    visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", damping: 15, stiffness: 100 } },
   };
 
   return (
+    // --> MODIFICACIÓN: Estilo de la tarjeta del proyecto.
+    // 'bg-gray-800': Fondo oscuro base.
+    // 'border border-gray-700/50': Borde sutil.
+    // 'hover:shadow-blue-500/30': Sombra azul al pasar el mouse para un efecto "glow" que coincide con el tema.
     <motion.div
       variants={cardVariants}
       className="group relative overflow-hidden rounded-lg shadow-lg bg-gray-800 border border-gray-700/50 transition-all duration-300 hover:shadow-blue-500/30 hover:border-blue-500/50"
-    
     >
-      <img
-        src={project.image}
-        alt={project.title}
-        className="w-full h-60 object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
-      />
+      <img src={project.image} alt={project.title} className="w-full h-60 object-cover transition-transform duration-500 ease-in-out group-hover:scale-105" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent" />
       <div className="absolute inset-0 p-6 flex flex-col justify-end">
+        {/* ... El contenido de la tarjeta ya tiene un estilo visualmente compatible ... */}
         <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>
         <div className="flex flex-wrap gap-2 mb-4">
-          {project.tags.map(tag => (
-            <span key={tag} className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm font-semibold rounded-full">
-              {tag}
-            </span>
-          ))}
+          {project.tags.map(tag => <span key={tag} className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm font-semibold rounded-full">{tag}</span>)}
         </div>
-        
-        {/* MODIFICACIÓN CLAVE: Transición suave para la descripción */}
         <div className="overflow-hidden transition-all duration-500 ease-in-out max-h-0 group-hover:max-h-40">
-          <p className="text-gray-300 text-base mb-4 pt-2">
-            {project.description}
-          </p>
+          <p className="text-gray-300 text-base mb-4 pt-2">{project.description}</p>
         </div>
         <div className="flex items-center gap-4">
-          <a href={project.repo} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-colors duration-300" aria-label="Ver repositorio en GitHub">
-            <FiGithub size={24} />
-          </a>
-          {project.link !== '#' && (
-            <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-colors duration-300" aria-label="Ver demo del proyecto">
-              <FiExternalLink size={24} />
-            </a>
-          )}
+          <a href={project.repo} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-colors duration-300"><FiGithub size={24} /></a>
+          {project.link !== '#' && <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-colors duration-300"><FiExternalLink size={24} /></a>}
         </div>
       </div>
     </motion.div>
   );
 };
 
-
-// --- Página de Proyectos ---
 const ProjectsPage = () => {
-  // ... (El array de `projects` no necesita cambios)
   const projects = [
-    { id: 1, title: 'Sistema de Gestión Hotelera', description: 'Aplicación de escritorio para la administración de huéspedes, habitaciones y actividades de un hotel, enfocada en la eficiencia del backend.', image: '/img/Proy1.png', link: '#', repo: 'https://github.com/Imaforbes/sistema_hotel', tags: ['Java', 'MySQL', 'Desktop App'] },
-    { id: 2, title: 'Grinch Animado con CSS', description: 'Demostración de animaciones complejas y manipulación del DOM utilizando únicamente HTML y CSS puro.', image: '/img/Proy2.png', link: '#', repo: 'https://github.com/Imaforbes/Yo-no-soy-grinch', tags: ['HTML', 'CSS', 'Animation'] },
-    { id: 3, title: 'Portafolio Freelancer', description: 'Plataforma web full-stack que sirve como un portafolio profesional, integrando un diseño limpio con funcionalidades de backend.', image: '/img/Proy3.png', link: '#', repo: 'https://github.com/Imaforbes/Freelancer-Project', tags: ['FullStack', 'PHP', 'JavaScript'] },
-    { id: 4, title: 'Landing Page Responsiva', description: 'Diseño y maquetación de una landing page moderna con un enfoque "mobile-first", asegurando una experiencia de usuario perfecta en todos los dispositivos.', image: '/img/Proy4.png', link: '#', repo: 'https://github.com/Imaforbes/Responsive-website', tags: ['HTML', 'CSS', 'Responsive Design'] },
+    { id: 1, title: 'Sistema de Gestión Hotelera', description: 'Aplicación de escritorio para la administración de huéspedes, habitaciones y actividades de un hotel.', image: '/img/Proy1.png', link: '#', repo: 'https://github.com/Imaforbes/sistema_hotel', tags: ['Java', 'MySQL'] },
+    { id: 2, title: 'Grinch Animado con CSS', description: 'Demostración de animaciones complejas y manipulación del DOM utilizando únicamente HTML y CSS.', image: '/img/Proy2.png', link: '#', repo: 'https://github.com/Imaforbes/Yo-no-soy-grinch', tags: ['HTML', 'CSS'] },
+    { id: 3, title: 'Portafolio Freelancer', description: 'Plataforma web full-stack que sirve como un portafolio profesional y sistema de contacto.', image: '/img/Proy3.png', link: '#', repo: 'https://github.com/Imaforbes/Freelancer-Project', tags: ['FullStack', 'PHP'] },
+    { id: 4, title: 'Landing Page Responsiva', description: 'Diseño y maquetación de una landing page moderna con un enfoque "mobile-first".', image: '/img/Proy4.png', link: '#', repo: 'https://github.com/Imaforbes/Responsive-website', tags: ['HTML', 'CSS', 'Responsive'] },
   ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.15, duration: 0.5 } },
+    visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.5 } },
   };
 
   return (
+    // --> MODIFICACIÓN: Estructura principal con el fondo animado y el degradado oscuro.
     <motion.section
       id="proyectos"
-      className="bg-gray-900 text-white min-h-screen"
+      className="relative min-h-screen bg-gradient-to-br from-gray-800 to-gray-700 text-white overflow-hidden"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
-      <div className="container mx-auto max-w-7xl py-24 px-6">
+      <HeroBackground />
+      <div className="relative z-10 container mx-auto max-w-6xl py-24 px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-3xl font-bold tracking-tighter mb-4">
+          {/* --> MODIFICACIÓN: Título de la sección con la tipografía audaz de HomePage. */}
+          <motion.h2
+            variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0 } }}
+            className="text-4xl font-extrabold tracking-tighter mb-4"
+          >
             Proyectos Destacados
-          </h2>
-          <p className="text-md text-gray-500 max-w-2xl mx-auto">
+          </motion.h2>
+          <motion.p
+            variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0 } }}
+            className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed"
+          >
             Una selección de mi trabajo. Cada proyecto representa un reto único y una oportunidad para aprender y crecer.
-          </p>
+          </motion.p>
         </div>
-
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
           variants={containerVariants}
         >
-          {projects.map(project => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
+          {projects.map(project => <ProjectCard key={project.id} project={project} />)}
         </motion.div>
       </div>
     </motion.section>

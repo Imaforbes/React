@@ -1,23 +1,21 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  // --- AÑADE ESTE BLOQUE DE CÓDIGO ---
   server: {
     proxy: {
-      // Proxy para evitar CORS en desarrollo. Redirige /api_db a Apache en localhost
+      // Cualquier petición que empiece con '/api_db' será redirigida.
       '/api_db': {
+        // La URL de tu servidor PHP.
+        // Asegúrate de que apunte a la carpeta raíz de tu proyecto en XAMPP.
         target: 'http://localhost',
         changeOrigin: true,
         secure: false,
       },
-      // Proxy adicional para rutas /api
-      '/api': {
-        target: 'http://localhost',
-        changeOrigin: true,
-        secure: false,
-      },
-    },
-  },
+    }
+  }
+  // ------------------------------------
 })

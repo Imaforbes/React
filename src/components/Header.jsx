@@ -108,10 +108,10 @@ const Header = () => {
             variants={menuVariants}
             className="md:hidden bg-white/95 absolute top-full left-0 w-full p-4 flex flex-col items-center space-y-4 shadow-lg z-40"
           >
-            <Link to="/" className="block..." onClick={handleNavLinkClick}>{t('nav.home')}</Link>
-            <Link to="/about" className="block..." onClick={handleNavLinkClick}>{t('nav.about')}</Link>
-            <Link to="/projects" className="block..." onClick={handleNavLinkClick}>{t('nav.projects')}</Link>
-            <Link to="/contact" className="block..." onClick={handleNavLinkClick}>{t('nav.contact')}</Link>
+            <Link to="/" className="block..." onClick={handleNavLinkClick}>{t('Home')}</Link>
+            <Link to="/about" className="block..." onClick={handleNavLinkClick}>{t('About')}</Link>
+            <Link to="/projects" className="block..." onClick={handleNavLinkClick}>{t('Projects')}</Link>
+            <Link to="/contact" className="block..." onClick={handleNavLinkClick}>{t('Contact')}</Link>
             
             <motion.div variants={itemVariants} className="flex items-center p-1 bg-gray-200 rounded-full mt-4">
               <button
