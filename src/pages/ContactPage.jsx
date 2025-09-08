@@ -1,6 +1,5 @@
 // src/pages/ContactPage.jsx
 import React, { useState, useEffect } from 'react';
-// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiSend, FiMail, FiLinkedin, FiGithub, FiLoader, FiCheckCircle, FiAlertTriangle, FiX } from 'react-icons/fi';
 
@@ -27,26 +26,39 @@ const ContactPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // --- FUNCIÓN handleSubmit MEJORADA Y MÁS ROBUSTA ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus({ message: 'Enviando...', type: 'info', sending: true });
 
     try {
-      const response = await fetch('/api_db/contact.php', { // Asegúrate de que esta URL sea correcta para el hosting
+      const response = await fetch('/api_db/contact.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
-      const result = await response.json();
+      // --> CAMBIO CLAVE: Leemos la respuesta como texto plano primero.
+      // Esto es mucho más seguro y compatible con todos los navegadores, ya que evita
+      // que la aplicación se congele si la respuesta no es un JSON perfecto.
+      const responseText = await response.text();
 
-      if (response.ok) {
+      // Ahora, intentamos convertir ese texto en un objeto JSON.
+      // Si el texto no es un JSON válido, el bloque catch se encargará del error.
+      const result = JSON.parse(responseText);
+
+      // Verificamos tanto la respuesta del servidor como el contenido del JSON.
+      if (response.ok && result.status === 'success') {
         setStatus({ message: '¡Mensaje enviado con éxito!', type: 'success', sending: false });
-        setFormData({ name: '', email: '', message: '' });
+        setFormData({ name: '', email: '', message: '' }); // Limpia el formulario
       } else {
-        setStatus({ message: `Error: ${result.message}`, type: 'error', sending: false });
+        // Si el servidor o el JSON indican un error, lo mostramos.
+        setStatus({ message: `Error: ${result.message || 'Ocurrió un error inesperado.'}`, type: 'error', sending: false });
       }
-    } catch {
+    } catch (error) {
+      // Este bloque ahora atrapará tanto errores de red (sin conexión) como errores
+      // si la respuesta del servidor no es un JSON válido (ej. un error de PHP).
+      console.error("Error en el envío del formulario:", error);
       setStatus({ message: 'Error de conexión. Inténtalo más tarde.', type: 'error', sending: false });
     }
   };
@@ -71,29 +83,19 @@ const ContactPage = () => {
         animate="visible"
       >
         <HeroBackground />
-        {/* Ajuste de padding y max-w para diferentes tamaños de pantalla */}
-        <div className="relative z-10 container mx-auto max-w-6xl py-16 px-4 md:py-24 md:px-6">
-          <div className="text-center mb-10 md:mb-16">
-            {/* Tamaño del título responsivo */}
-            
-            <motion.h1
-            className="text-4xl sm:text-4xl md:text-4xl font-extrabold mb-4 leading-tight tracking-tighter"
-          >
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-teal-300 to-purple-400 animate-gradient-x">
-            Hablemos
-            </span>
-          </motion.h1>
-            {/* Tamaño del texto responsivo */}
-            <motion.p variants={itemVariants} className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+        <div className="relative z-10 container mx-auto max-w-6xl py-24 px-4 md:px-6">
+          <div className="text-center mb-12 md:mb-16">
+            <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-extrabold tracking-tighter mb-4">
+              Hablemos
+            </motion.h2>
+            <motion.p variants={itemVariants} className="text-base md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
               ¿Tienes una idea, un proyecto o simplemente quieres saludar? Me encantaría saber de ti.
             </motion.p>
           </div>
 
-          {/* Disposición responsiva del grid de contacto */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
             <motion.div variants={itemVariants} className="space-y-6">
               <h3 className="text-xl md:text-2xl font-bold mb-4">Información de Contacto</h3>
-              {/* Ajuste de tamaño de texto para enlaces de contacto */}
               <a href="mailto:imanol@imaforbes.com" className="group flex items-center gap-4 text-base md:text-lg text-gray-300 hover:text-blue-400 transition-colors"><FiMail /><span>imanol@imaforbes.com</span></a>
               <a href="https://www.linkedin.com/in/imanol-pérez-arteaga-a72a08235" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 text-base md:text-lg text-gray-300 hover:text-blue-400 transition-colors"><FiLinkedin /><span>LinkedIn</span></a>
               <a href="https://github.com/Imaforbes" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 text-base md:text-lg text-gray-300 hover:text-blue-400 transition-colors"><FiGithub /><span>GitHub</span></a>
@@ -112,30 +114,47 @@ const ContactPage = () => {
                 <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-2">Mensaje</label>
                 <textarea id="message" name="message" value={formData.message} onChange={handleChange} required rows="5" className="w-full p-3 bg-gray-900/50 border-2 border-gray-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition resize-none"></textarea>
               </div>
-              {/* Tamaño del botón responsivo */}
-              <button type="submit" disabled={status.sending} className="group flex items-center justify-center gap-2 px-7 py-3 md:px-9 md:py-3.5 bg-blue-600 hover:bg-blue-700 text-white text-base md:text-lg font-semibold rounded-full shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:bg-gray-500 disabled:cursor-wait">
-                {status.sending ? <><FiLoader className="animate-spin" /> Enviando...</> : <>Enviar Mensaje <FiSend /></>}
+              <button type="submit" disabled={status.sending} className="group flex items-center justify-center gap-2 px-9 py-3.5 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-full shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:bg-gray-500 disabled:cursor-wait">
+                {status.sending ? <><FiLoader className="animate-spin" /> Enviando...</> : <>Contactar <FiSend /></>}
               </button>
             </motion.form>
           </div>
         </div>
       </motion.section>
       
-      {/* Notificación Toast (ajuste de padding para móvil) */}
-      <AnimatePresence>
-        {status.message && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className={`fixed bottom-5 right-5 p-3 md:p-4 rounded-lg shadow-2xl flex items-center gap-4 text-white ${status.type === 'success' ? 'bg-green-600' : 'bg-red-600'}`}
-          >
-            {status.type === 'success' ? <FiCheckCircle size={24} /> : <FiAlertTriangle size={24} />}
-            <p className="font-semibold text-sm md:text-base">{status.message}</p>
-            <button onClick={() => setStatus({ message: '', type: '', sending: false })} className="p-1 rounded-full hover:bg-white/20"><FiX size={18} /></button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+     {/* --> INICIO DE LA SECCIÓN MODIFICADA: Banner Superior Responsivo */}
+     <div className="fixed top-20 md:top-24 left-1/2 -translate-x-1/2 w-[90%] md:w-full max-w-lg z-50">
+        <AnimatePresence>
+          {status.message && (
+            <motion.div
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -30 }}
+              transition={{ type: "spring", stiffness: 200, damping: 20 }}
+              className={`relative w-full p-4 rounded-xl shadow-2xl flex items-center space-x-4
+                ${status.type === 'success' ? 'bg-green-500' : ''}
+                ${status.type === 'error' ? 'bg-red-500' : ''}
+              `}
+            >
+              <div className="flex-shrink-0">
+                {status.type === 'success' && <FiCheckCircle className="w-6 h-6 text-white" />}
+                {status.type === 'error' && <FiAlertTriangle className="w-6 h-6 text-white" />}
+              </div>
+              <div className="flex-1">
+                <p className="text-white text-sm md:text-base font-semibold">
+                  {status.message}
+                </p>
+              </div>
+              <div className="flex-shrink-0">
+                <button onClick={() => setStatus({ message: '', type: '', sending: false })} className="p-1 rounded-full text-white/70 hover:text-white hover:bg-white/20 transition-colors">
+                  <FiX size={18} />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+      {/* --> FIN DE LA SECCIÓN MODIFICADA */}
     </>
   );
 };
